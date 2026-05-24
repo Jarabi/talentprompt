@@ -9,7 +9,7 @@ const app = express();
 
 const allowedOrigins = [
     'http://localhost:5173',
-    'https://talentprompt.vercel.app/',
+    'https://talentprompt.vercel.app',
 ].filter(Boolean);
 
 app.use(
@@ -65,12 +65,9 @@ app.post('/api/questions', async (req, res) => {
         return res.json({ questions });
     } catch (error) {
         console.error('Gemini API Error:', error);
-        return res
-            .status(500)
-            .json({
-                error:
-                    error?.message || 'Failed to generate interview questions',
-            });
+        return res.status(500).json({
+            error: error?.message || 'Failed to generate interview questions',
+        });
     }
 });
 
