@@ -34,5 +34,5 @@ Ensure you have a Gemini API key. You can get one for free at [ai.google.dev](ht
 
 ### 1. Clone the repository
 ```bash
-git clone [https://github.com/Jarabi/talentprompt.git](https://github.com/Jarabi/talentprompt.git)
-cd YOUR_REPO_NAME
+git clone https://github.com/Jarabi/talentprompt.git
+cd talentprompt
