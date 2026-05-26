@@ -1,5 +1,6 @@
 import process from 'node:process';
 import cors from 'cors';
+import rateLimit from 'express-rate-limit';
 import express from 'express';
 import dotenv from 'dotenv';
 import { GoogleGenAI } from '@google/genai';
@@ -7,25 +8,9 @@ import { GoogleGenAI } from '@google/genai';
 dotenv.config();
 const app = express();
 
-const allowedOrigins = [
-    'http://localhost:5173',
-    'https://talentprompt.vercel.app',
-].filter(Boolean);
-
 app.use(
     cors({
-        origin: function (origin, callback) {
-            // Allow requests with no origin (like mobile apps, curl, or server-to-server)
-            if (!origin) return callback(null, true);
-
-            if (allowedOrigins.indexOf(origin) !== -1) {
-                callback(null, true);
-            } else {
-                console.log(`Blocked by CORS: ${origin}`);
-                callback(new Error('Not allowed by CORS'));
-            }
-        },
-        credentials: true,
+        origin: 'https://talentprompt.vercel.app', // No other domains allowed
         optionsSuccessStatus: 200,
     }),
 );
@@ -48,7 +33,19 @@ const parseQuestions = (text) => {
         .slice(0, 3);
 };
 
-app.post('/api/questions', async (req, res) => {
+// Define the limit rule: Max5 requests every 10 minutes per IP
+const apiLimiter = rateLimit({
+    windowMs: 10 * 60 * 1000, // 10 minutes
+    max: 5,
+    message: {
+        error: 'Too many requests. Try again in 10 minutes.',
+    },
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+
+// Apply the limiter strictly to your AI generation route
+app.post('/api/questions', apiLimiter, async (req, res) => {
     const { jobTitle } = req.body;
 
     if (!jobTitle || typeof jobTitle !== 'string' || !jobTitle.trim()) {
