@@ -8,9 +8,25 @@ import { GoogleGenAI } from '@google/genai';
 dotenv.config();
 const app = express();
 
+const allowedOrigins = [
+    'http://localhost:5173',
+    'https://talentprompt.vercel.app',
+].filter(Boolean);
+
 app.use(
     cors({
-        origin: 'https://talentprompt.vercel.app', // No other domains allowed
+        origin: function (origin, callback) {
+            // Allow requests with no origin (like mobile apps, curl, or server-to-server)
+            if (!origin) return callback(null, true);
+
+            if (allowedOrigins.indexOf(origin) !== -1) {
+                callback(null, true);
+            } else {
+                console.log(`Blocked by CORS: ${origin}`);
+                callback(null, false);
+            }
+        },
+        credentials: true,
         optionsSuccessStatus: 200,
     }),
 );
