@@ -3,8 +3,16 @@
 A secure, decoupled full-stack web application that leverages generative AI to instantly create three contextual, role-specific interview questions based on a user's target job title. Engineered with a production-minded architecture as part of a Technical Founding Engineer evaluation.
 
 *   **Live Frontend (Vite/Vercel):** [Talent Prompt](https://talentprompt.vercel.app/)
-<!-- *   **Live Backend Proxy (Node/Render):** [Insert Live Render URL Here]
-*   **Video Walkthrough:** [Insert Loom Walkthrough Link Here] -->
+*   **Talent Prompt Showcase**
+<div align="center">
+    <video src="https://github.com/user-attachments/assets/df5e2354-4af0-488b-9c16-b44badbf01ef" 
+        width="100%" 
+        autoplay 
+        loop 
+        muted 
+        playsinline>
+    </video>
+</div>
 
 ---
 
