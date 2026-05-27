@@ -50,15 +50,6 @@ const parseQuestions = (text) => {
 };
 
 // Define the limit rule: Max5 requests every 10 minutes per IP
-// const apiLimiter = rateLimit({
-//     windowMs: 10 * 60 * 1000, // 10 minutes
-//     max: 5,
-//     message: {
-//         error: 'Too many requests. Try again in 10 minutes.',
-//     },
-//     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-//     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-// });
 const apiLimiter = rateLimit({
     windowMs: 10 * 60 * 1000, // 10 minutes
     max: 5,
