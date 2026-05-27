@@ -50,14 +50,29 @@ const parseQuestions = (text) => {
 };
 
 // Define the limit rule: Max5 requests every 10 minutes per IP
+// const apiLimiter = rateLimit({
+//     windowMs: 10 * 60 * 1000, // 10 minutes
+//     max: 5,
+//     message: {
+//         error: 'Too many requests. Try again in 10 minutes.',
+//     },
+//     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+//     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+// });
 const apiLimiter = rateLimit({
     windowMs: 10 * 60 * 1000, // 10 minutes
     max: 5,
-    message: {
-        error: 'Too many requests. Try again in 10 minutes.',
+    // Using a dynamic handler function lets us customize the response cleanly
+    handler: (req, res, next, options) => {
+        return res.status(429).json({
+            status: 'throttled',
+            // A friendly message explaining the "why" behind the limit
+            error: "You've generated a few roles! To keep our community free-tier tokens safe from automated bots, we cap requests at 5 per 10 minutes. Please take a quick breather and try again shortly!",
+            retryAfterMins: 10,
+        });
     },
-    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    standardHeaders: true,
+    legacyHeaders: false,
 });
 
 // Apply the limiter strictly to your AI generation route
